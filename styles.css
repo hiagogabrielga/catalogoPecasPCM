@@ -79,7 +79,7 @@ header {
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
   padding: 20px;
-  padding-top: 6%;
+  padding-top: 120px;
 }
 .card {
   background: white;
@@ -237,4 +237,28 @@ header {
 .imgName {
   display: flex;
   align-items: center;
+}
+
+@media screen and (max-width: 1700px) {
+  .imgName span {
+    display: none;
+  }
+}
+@media screen and (max-width: 1150px) {
+  .imgName {
+    display: none;
+  }
+  .search-box {
+    width: 60%;
+  }
+}
+
+@media screen and (max-width: 570px) {
+  header {
+    flex-direction: column;
+  }
+  .search-box {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }

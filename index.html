@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Materiais</title>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Catálogo de peças" />
+    <meta
+      name="twitter:description"
+      content="Veja nosso catálogo completo de peças"
+    />
+    <meta
+      name="twitter:image"
+      content="https://catalogo-pecas.vercel.app/logo.png"
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="logo.png" />
+    <link rel="apple-touch-icon" href="logo.png" />
+
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <style></style>
+  </head>
+  <body>
+    <header>
+      <div class="imgName">
+        <img src="./amaggi.png" alt="Logo Amaggi" />
+        <span class="headerName">Catálogo interno de peças</span>
+      </div>
+      <div class="search-box">
+        <input
+          type="text"
+          id="search"
+          placeholder="🔍 Buscar por código ou nome..."
+          oninput="filtrarDebounced()"
+        />
+      </div>
+
+      <a
+        class="ancoraEpi"
+        href="https://amaggicombr-my.sharepoint.com/:x:/r/personal/thiago_ooliveira_amaggi_com_br/Documents/Cat%C3%A1logo%20de%20EPI%20Almoxarifado.XLSX?d=w9a4104c095914d4c8f1ca3a2494e61eb&csf=1&web=1&e=D0fsDA"
+        target="_blank"
+        >Catálogo EPI</a
+      >
+    </header>
+
+    <div class="container" id="cards"></div>
+
+    <script>
+      let listaCompleta = [];
+      let debounceTimer;
+      const IMAGEM_PADRAO = "placeholder.png";
+      const CACHE_KEY = "catalogoPecas";
+      const CACHE_VERSION_KEY = "catalogoPecasVersao";
+      const VERSAO_ATUAL = "1.1";
+
+      async function lerExcel(caminho) {
+        const response = await fetch(caminho);
+        const arrayBuffer = await response.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: "array" });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        return XLSX.utils.sheet_to_json(sheet);
+      }
+
+      async function imagemExiste(url) {
+        try {
+          const response = await fetch(url, { method: "HEAD" });
+          if (response.ok) return true;
+        } catch (e) {}
+
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => resolve(true);
+          img.onerror = () => resolve(false);
+          img.src = url;
+        });
+      }
+
+      async function encontrarImagem(codigo) {
+        const extensoes = ["png", "jpg", "jpeg", "gif"];
+        for (let ext of extensoes) {
+          const caminho = `imagens/${codigo}.${ext}`;
+          const existe = await imagemExiste(caminho);
+          if (existe) return caminho;
+        }
+        return null;
+      }
+
+      async function carregarDados() {
+        try {
+          const versaoSalva = localStorage.getItem(CACHE_VERSION_KEY);
+          const dadosSalvos = localStorage.getItem(CACHE_KEY);
+
+          if (dadosSalvos && versaoSalva === VERSAO_ATUAL) {
+            listaCompleta = JSON.parse(dadosSalvos);
+            renderizar(listaCompleta);
+            console.log("Cache válido - carregado do localStorage");
+            return;
+          }
+
+          console.log("Cache inválido ou inexistente - recarregando...");
+
+          const [materiais, estoque] = await Promise.all([
+            lerExcel("dados/nomes_usuais.xlsx"),
+            lerExcel("dados/relatorio.xlsx"),
+          ]);
+          let cont = 0;
+
+          const estoqueMap = new Map(
+            estoque.map((item) => [
+              String(item.material),
+              {
+                unidade: item.unidade,
+                quantidade: item.quantidade,
+              },
+            ]),
+          );
+
+          const candidatos = await Promise.all(
+            materiais.map(async (mat) => {
+              const cod = String(mat.material);
+              const dadosEstoque = estoqueMap.get(cod);
+              let img = await encontrarImagem(cod);
+              cont++;
+              if (!img) {
+                img = IMAGEM_PADRAO;
+              }
+
+              return {
+                codigo: cod,
+                nome: mat.nome,
+                categoria: mat.categoria,
+                imagem: img,
+                unidade: dadosEstoque?.unidade ?? "UN",
+                quantidade: dadosEstoque?.quantidade ?? 0,
+                contagem: cont,
+              };
+            }),
+          );
+
+          function copiarCodigo(codigo) {
+            navigator.clipboard.writeText(codigo).then(() => {
+              mostrarToast(`Código ${codigo} copiado`);
+            });
+          }
+
+          function mostrarToast(texto) {
+            const toast = document.getElementById("toast");
+            toast.textContent = texto;
+            toast.classList.add("mostrar");
+
+            setTimeout(() => {
+              toast.classList.remove("mostrar");
+            }, 2000);
+          }
+
+          listaCompleta = candidatos.filter(Boolean);
+          renderizar(listaCompleta);
+
+          localStorage.setItem(CACHE_KEY, JSON.stringify(listaCompleta));
+          localStorage.setItem(CACHE_VERSION_KEY, VERSAO_ATUAL);
+
+          console.log("Novo cache salvo");
+        } catch (erro) {
+          console.error("Erro ao carregar arquivos:", erro);
+        }
+      }
+
+      function agruparPorCategoria(lista) {
+        return lista.reduce((acc, item) => {
+          const categoria = item.categoria || "Sem categoria";
+
+          if (!acc[categoria]) {
+            acc[categoria] = [];
+          }
+
+          acc[categoria].push(item);
+          return acc;
+        }, {});
+      }
+
+      function mostrarToast(texto) {
+        const toast = document.getElementById("toast");
+        toast.textContent = texto;
+        toast.classList.add("mostrar");
+        setTimeout(() => toast.classList.remove("mostrar"), 2000);
+      }
+
+      function copiarCodigo(codigo) {
+        navigator.clipboard.writeText(codigo);
+        mostrarToast(`Código ${codigo} copiado`);
+      }
+
+      function criarCard(item) {
+        const card = document.createElement("div");
+        card.className = `card ${
+          item.quantidade > 0 ? "estoque-ok" : "estoque-zero"
+        }`;
+
+        card.innerHTML = `
+          <div class="status-bar"></div>
+          <img src="${item.imagem}" alt="${item.imagem}">
+          <div class="codigo-linha">
+            <span class="codigo">Código: ${item.codigo}</span>
+            <button class="copiar-btn" onclick="copiarCodigo('${item.codigo}')">📋</button>
+          </div>
+
+          <div class="nome">${item.nome}</div>
+
+          <div class="estoque">
+            <span class="quantidade">${item.quantidade}</span>
+            <span class="unidade">${item.unidade}</span>
+          </div>
+        `;
+        return card;
+      }
+
+      function renderizar(lista) {
+        const container = document.getElementById("cards");
+        container.innerHTML = "";
+
+        const agrupado = agruparPorCategoria(lista);
+
+        Object.entries(agrupado).forEach(([categoria, itens]) => {
+          // Container da categoria
+          const categoriaDiv = document.createElement("div");
+          categoriaDiv.className = "categoria";
+
+          // Header (título + botão)
+          const header = document.createElement("div");
+          header.className = "categoria-header";
+
+          const titulo = document.createElement("h2");
+          titulo.textContent = categoria;
+
+          const botao = document.createElement("button");
+          botao.className = "toggle-btn";
+          botao.textContent = "⯆";
+
+          header.appendChild(titulo);
+          header.appendChild(botao);
+
+          // Conteúdo (cards)
+          const conteudo = document.createElement("div");
+          conteudo.className = "categoria-conteudo";
+
+          itens.forEach((item) => {
+            conteudo.appendChild(criarCard(item));
+          });
+
+          // Evento de expandir/recolher
+          botao.onclick = () => {
+            const fechado = conteudo.classList.toggle("fechado");
+            botao.textContent = fechado ? "⯈" : "⯆";
+          };
+
+          categoriaDiv.appendChild(header);
+          categoriaDiv.appendChild(conteudo);
+          container.appendChild(categoriaDiv);
+        });
+      }
+
+      function removerAcentos(texto) {
+        return texto
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .toLowerCase();
+      }
+
+      function filtrarDebounced() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          const termo = removerAcentos(document.getElementById("search").value);
+
+          const filtrados = listaCompleta.filter((item) => {
+            const codigo = removerAcentos(item.codigo);
+            const nome = removerAcentos(item.nome);
+
+            return codigo.includes(termo) || nome.includes(termo);
+          });
+
+          renderizar(filtrados);
+        }, 200);
+      }
+
+      window.onload = carregarDados;
+    </script>
+    <div id="toast" class="toast"></div>
+  </body>
+</html>

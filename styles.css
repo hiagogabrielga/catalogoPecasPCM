@@ -1,0 +1,236 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: "Segoe UI", Arial;
+  background: #eef2f7;
+  margin: 0;
+}
+header {
+  display: flex;
+  align-items: center;
+  background: #222f41;
+  color: white;
+  padding: 15px 25px;
+  justify-content: space-between;
+}
+
+.categoria {
+  grid-column: 1 / -1;
+  margin-bottom: 20px;
+}
+
+.categoria-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f3f4f6;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+.categoria-header h2 {
+  margin: 0;
+  color: #1f2937;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.categoria-conteudo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.categoria-conteudo.fechado {
+  display: none;
+}
+
+.headerName {
+  font-size: 26px;
+  margin-left: 10px;
+}
+.search-box {
+  padding: 15px 20px;
+  background: #2e3d53;
+  min-width: 50%;
+  box-sizing: border-box;
+  border-radius: 15px;
+}
+.search-box input {
+  width: 100%;
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  outline: none;
+}
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  transition: 0.2s;
+}
+.card:hover {
+  transform: translateY(-5px);
+}
+.card img {
+  width: 100%;
+  height: 140px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+.codigo {
+  font-weight: bold;
+  color: #111827;
+  margin-bottom: 5px;
+}
+.nome {
+  font-size: 14px;
+  color: #374151;
+  margin-bottom: 8px;
+}
+.info {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Barra lateral */
+.status-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 8px;
+  height: 100%;
+  border-radius: 12px 0 0 12px;
+}
+
+/* Estoque OK */
+.card.estoque-ok .status-bar {
+  background: #22c55e; /* verde */
+}
+
+/* Estoque ZERO */
+.card.estoque-zero .status-bar {
+  background: #ef4444; /* vermelho */
+}
+
+/* Ajuste de espaçamento interno */
+.card img,
+.card .codigo,
+.card .nome,
+.card .estoque {
+  margin-left: 8px;
+}
+
+/* Bloco de estoque */
+.estoque {
+  margin-top: 8px;
+  font-size: 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.quantidade {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.card.estoque-ok .quantidade {
+  color: #16a34a;
+}
+
+.card.estoque-zero .quantidade {
+  color: #dc2626;
+}
+
+.unidade {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #111827;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+  transition:
+    opacity 0.3s,
+    transform 0.3s;
+  z-index: 9999;
+}
+
+.toast.mostrar {
+  opacity: 1;
+  transform: translateY(0);
+}
+.codigo-linha {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.copiar-btn {
+  background: #e5e7eb;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.copiar-btn:hover {
+  background: #d1d5db;
+}
+
+.ancoraEpi {
+  width: 200px;
+  height: 50px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-size: 20px;
+  color: white;
+  background-color: #3065a1;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.2;
+}
+
+.ancoraEpi:hover {
+  color: rgb(228, 228, 228);
+  background-color: #305b8b;
+}
+.imgName {
+  display: flex;
+  align-items: center;
+}

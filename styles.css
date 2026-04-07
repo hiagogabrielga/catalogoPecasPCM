@@ -11,6 +11,9 @@ header {
   align-items: center;
   background: #222f41;
   color: white;
+  position: fixed;
+  z-index: 1;
+  width: 100vw;
   padding: 15px 25px;
   justify-content: space-between;
 }
@@ -76,6 +79,7 @@ header {
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 20px;
   padding: 20px;
+  padding-top: 6%;
 }
 .card {
   background: white;

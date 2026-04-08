@@ -51,7 +51,7 @@
       const IMAGEM_PADRAO = "placeholder.png";
       const CACHE_KEY = "catalogoPecas";
       const CACHE_VERSION_KEY = "catalogoPecasVersao";
-      const VERSAO_ATUAL = "1.4";
+      const VERSAO_ATUAL = "1.7";
 
       async function lerExcel(caminho) {
         const response = await fetch(caminho);
@@ -111,6 +111,7 @@
               {
                 unidade: item.unidade,
                 quantidade: item.quantidade,
+                deposito: item.deposito
               },
             ]),
           );
@@ -133,6 +134,7 @@
                 unidade: dadosEstoque?.unidade ?? "UN",
                 quantidade: dadosEstoque?.quantidade ?? 0,
                 contagem: cont,
+                deposito: dadosEstoque?.deposito ?? "PC01"
               };
             }),
           );
@@ -187,13 +189,14 @@
             <span class="codigo">Código: ${item.codigo}</span>
             <button class="copiar-btn" onclick="copiarCodigo('${item.codigo}')">📋</button>
           </div>
-
           <div class="nome">${item.nome}</div>
-
+          <div class="codigo-linha"><span class="codigo">Deposito: ${item.deposito}</span></div>
           <div class="estoque">
             <span class="quantidade">${item.quantidade}</span>
             <span class="unidade">${item.unidade}</span>
           </div>
+
+          
         `;
         return card;
       }
@@ -205,11 +208,9 @@
         const agrupado = agruparPorCategoria(lista);
 
         Object.entries(agrupado).forEach(([categoria, itens]) => {
-          // Container da categoria
           const categoriaDiv = document.createElement("div");
           categoriaDiv.className = "categoria";
 
-          // Header (título + botão)
           const header = document.createElement("div");
           header.className = "categoria-header";
 
@@ -223,7 +224,6 @@
           header.appendChild(titulo);
           header.appendChild(botao);
 
-          // Conteúdo (cards)
           const conteudo = document.createElement("div");
           conteudo.className = "categoria-conteudo";
 
@@ -231,7 +231,6 @@
             conteudo.appendChild(criarCard(item));
           });
 
-          // Evento de expandir/recolher
           botao.onclick = () => {
             const fechado = conteudo.classList.toggle("fechado");
             botao.textContent = fechado ? "⯈" : "⯆";

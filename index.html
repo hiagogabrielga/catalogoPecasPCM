@@ -51,7 +51,7 @@
       const IMAGEM_PADRAO = "placeholder.png";
       const CACHE_KEY = "catalogoPecas";
       const CACHE_VERSION_KEY = "catalogoPecasVersao";
-      const VERSAO_ATUAL = "1.2.10";
+      const VERSAO_ATUAL = "1.10.3"; //versão site - versão imagens - versão estoque
 
       async function lerExcel(caminho) {
         const response = await fetch(caminho);
@@ -179,7 +179,7 @@
       function criarCard(item) {
         const card = document.createElement("div");
         card.className = `card ${
-          item.quantidade > 0 ? "estoque-ok" : "estoque-zero"
+          (Number(String(item.quantidade).replace(",", "."))) > 0 ? "estoque-ok" : "estoque-zero"
         }`;
 
         card.innerHTML = `

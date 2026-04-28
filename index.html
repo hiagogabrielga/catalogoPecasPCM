@@ -50,7 +50,7 @@
       const IMAGEM_PADRAO = "placeholder.png";
       const CACHE_KEY = "catalogoPecasPCM";
       const CACHE_VERSION_KEY = "catalogoPecasPcmVersao";
-      const VERSAO_ATUAL = "1.17.20"; //versão site - versão imagens - versão estoque
+      const VERSAO_ATUAL = "1.17.21"; //versão site - versão imagens - versão estoque
 
       async function lerExcel(caminho) {
         const response = await fetch(caminho);
@@ -77,7 +77,7 @@
       async function encontrarImagem(codigo) {
         const extensoes = ["png", "jpg", "jpeg", "gif"];
         for (let ext of extensoes) {
-          const caminho = `dados-catalago-pcm-externo/imagens/${codigo}.${ext}`;
+          const caminho = `dados-catalago-pcm-interno/imagens/${codigo}.${ext}`;
           const existe = await imagemExiste(caminho);
           if (existe) return caminho;
         }
@@ -99,8 +99,8 @@
           console.log("Cache inválido ou inexistente - recarregando...");
 
           const [materiais, estoque] = await Promise.all([
-            lerExcel("dados-catalago-pcm-externo/nomes_usuais.xlsx"),
-            lerExcel("dados-catalago-pcm-externo/relatorio.xlsx"),
+            lerExcel("dados-catalago-pcm-interno/nomes_usuais.xlsx"),
+            lerExcel("dados-catalago-pcm-interno/relatorio.xlsx"),
           ]);
           let cont = 0;
 

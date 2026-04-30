@@ -50,7 +50,7 @@
       const IMAGEM_PADRAO = "placeholder.png";
       const CACHE_KEY = "catalogoPecasPCM";
       const CACHE_VERSION_KEY = "catalogoPecasPcmVersao";
-      const VERSAO_ATUAL = "1.18.22"; //versão site - versão imagens - versão estoque
+      const VERSAO_ATUAL = "1.21.23"; //versão site - versão imagens - versão estoque
 
       async function lerExcel(caminho) {
         const response = await fetch(caminho);
@@ -117,7 +117,10 @@
 
           const candidatos = await Promise.all(
             materiais.map(async (mat) => {
-              const cod = String(mat.material);
+              let cod = String(mat.material)
+              console.log(cod)
+              cod = cod.replace(" ", "")
+              console.log(cod)
               const dadosEstoque = estoqueMap.get(cod);
               let img = await encontrarImagem(cod);
               cont++;

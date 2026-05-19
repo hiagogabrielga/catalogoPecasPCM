@@ -13,9 +13,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="logo.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="logo.png" />
     <link rel="apple-touch-icon" href="logo.png" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="css/global.css" />
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
-    <style></style>
   </head>
 
   <body>
@@ -24,336 +23,26 @@
         <img src="./amaggi.png" alt="Logo Amaggi" />
         <span class="headerName">Catálogo interno de peças</span>
       </div>
-      <div class="search-box">
-        <input
-          type="text"
-          id="search"
-          placeholder="🔍 Buscar por código ou nome..."
-          oninput="filtrarDebounced()"
-        />
+      <div class="botoesHeader">
+        <div class="search-box">
+          <input
+            type="text"
+            id="search"
+            placeholder="🔍 Buscar por código ou nome..."
+            oninput="filtrarDebounced()"
+          />
+        </div>
+        <a href="/criacao_externa.html" class="navegacao">📝</a>
+        <a
+          class="ancoraEpi"
+          href="https://amaggicombr-my.sharepoint.com/:x:/r/personal/thiago_ooliveira_amaggi_com_br/Documents/Cat%C3%A1logo%20de%20EPI%20Almoxarifado.XLSX?d=w9a4104c095914d4c8f1ca3a2494e61eb&csf=1&web=1&e=D0fsDA"
+          target="_blank"
+          >Catálogo EPI</a
+        >
       </div>
-
-      <a
-        class="ancoraEpi"
-        href="https://amaggicombr-my.sharepoint.com/:x:/r/personal/thiago_ooliveira_amaggi_com_br/Documents/Cat%C3%A1logo%20de%20EPI%20Almoxarifado.XLSX?d=w9a4104c095914d4c8f1ca3a2494e61eb&csf=1&web=1&e=D0fsDA"
-        target="_blank"
-        >Catálogo EPI</a
-      >
     </header>
     <div class="container" id="cards"></div>
 
-    <script>
-      let listaCompleta = [];
-      let debounceTimer;
-      let atualizacaoDisponivel = false;
-      const IMAGEM_PADRAO = "placeholder.png";
-      const CACHE_KEY = "catalogoPecasPCM";
-      const CACHE_VERSION_KEY = "catalogoPecasPcmVersao";
-      const VERSAO_ATUAL = "1.23.45"; //versão site - versão imagens - versão estoque
-
-      async function lerExcel(caminho) {
-        const response = await fetch(`${caminho}?v=${Date.now()}`, {
-          cache: "no-store",
-        });
-
-        const arrayBuffer = await response.arrayBuffer();
-
-        const workbook = XLSX.read(arrayBuffer, {
-          type: "array",
-        });
-
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-
-        return XLSX.utils.sheet_to_json(sheet);
-      }
-
-      async function imagemExiste(url) {
-        try {
-          const response = await fetch(url, { method: "HEAD" });
-          if (response.ok) return true;
-        } catch (e) {}
-
-        return new Promise((resolve) => {
-          const img = new Image();
-          img.onload = () => resolve(true);
-          img.onerror = () => resolve(false);
-          img.src = url;
-        });
-      }
-
-      async function encontrarImagem(codigo) {
-        const extensoes = ["png", "jpg", "jpeg", "gif"];
-        for (let ext of extensoes) {
-          const caminho = `dados-catalago-pcm-interno/imagens/${codigo}.${ext}`;
-          const existe = await imagemExiste(caminho);
-          if (existe) return caminho;
-        }
-        return null;
-      }
-
-      async function carregarDados() {
-        try {
-          const versaoSalva = localStorage.getItem(CACHE_VERSION_KEY);
-          const dadosSalvos = localStorage.getItem(CACHE_KEY);
-
-          if (dadosSalvos && versaoSalva === VERSAO_ATUAL) {
-            listaCompleta = JSON.parse(dadosSalvos);
-            renderizar(listaCompleta);
-            console.log("Cache válido - carregado do localStorage");
-            return;
-          }
-
-          console.log("Cache inválido ou inexistente - recarregando...");
-
-          const [materiais, estoque] = await Promise.all([
-            lerExcel("dados-catalago-pcm-interno/nomes_usuais.xlsx"),
-            lerExcel("dados-catalago-pcm-interno/relatorio.xlsx"),
-          ]);
-          let cont = 0;
-
-          const estoqueMap = new Map(
-            estoque.map((item) => [
-              String(item.material),
-              {
-                unidade: item.unidade,
-                quantidade: item.quantidade,
-                deposito: item.deposito,
-              },
-            ]),
-          );
-
-          const candidatos = await Promise.all(
-            materiais.map(async (mat) => {
-              let cod = String(mat.material);
-              console.log(cod);
-              cod = cod.replace(/\s+/g, "");
-              console.log(cod);
-              const dadosEstoque = estoqueMap.get(cod);
-              let img = await encontrarImagem(cod);
-              cont++;
-              if (!img) {
-                img = IMAGEM_PADRAO;
-              }
-
-              return {
-                codigo: cod,
-                nome: mat.nome,
-                categoria: mat.categoria,
-                imagem: img,
-                unidade: dadosEstoque?.unidade ?? "UN",
-                quantidade: dadosEstoque?.quantidade ?? 0,
-                contagem: cont,
-                deposito: dadosEstoque?.deposito ?? "PC01",
-              };
-            }),
-          );
-
-          listaCompleta = candidatos.filter(Boolean);
-          renderizar(listaCompleta);
-
-          localStorage.setItem(CACHE_KEY, JSON.stringify(listaCompleta));
-          localStorage.setItem(CACHE_VERSION_KEY, VERSAO_ATUAL);
-
-          console.log("Novo cache salvo");
-        } catch (erro) {
-          console.error("Erro ao carregar arquivos:", erro);
-        }
-      }
-
-      function agruparPorCategoria(lista) {
-        return lista.reduce((acc, item) => {
-          const categoria = item.categoria || "Sem categoria";
-
-          if (!acc[categoria]) {
-            acc[categoria] = [];
-          }
-
-          acc[categoria].push(item);
-          return acc;
-        }, {});
-      }
-
-      function mostrarToast(texto) {
-        const toast = document.getElementById("toast");
-        toast.textContent = texto;
-        toast.classList.add("mostrar");
-        setTimeout(() => toast.classList.remove("mostrar"), 2000);
-      }
-
-      function copiarCodigo(codigo) {
-        navigator.clipboard.writeText(codigo);
-        mostrarToast(`Código ${codigo} copiado`);
-      }
-
-      function criarCard(item) {
-        const card = document.createElement("div");
-        card.className = `card ${
-          Number(String(item.quantidade).replace(",", ".")) > 0
-            ? "estoque-ok"
-            : "estoque-zero"
-        }`;
-
-        card.innerHTML = `
-          <div class="status-bar"></div>
-          <img src="${item.imagem}" alt="${item.imagem}">
-          <div class="codigo-linha">
-            <span class="codigo">Código: ${item.codigo}</span>
-            <button class="copiar-btn" onclick="copiarCodigo('${item.codigo}')">📋</button>
-          </div>
-          <div class="nome">${item.nome}</div>
-          <div class="estoque">
-            <span class="quantidade">${item.quantidade}</span>
-            <span class="unidade">${item.unidade}</span>
-          </div>
-
-          
-        `;
-        return card;
-      }
-
-      function renderizar(lista) {
-        const container = document.getElementById("cards");
-        container.innerHTML = ``;
-
-        const agrupado = agruparPorCategoria(lista);
-
-        Object.entries(agrupado).forEach(([categoria, itens]) => {
-          const categoriaDiv = document.createElement("div");
-          categoriaDiv.className = "categoria";
-
-          const header = document.createElement("div");
-          header.className = "categoria-header";
-
-          const titulo = document.createElement("h2");
-          titulo.textContent = categoria;
-
-          const botao = document.createElement("button");
-          botao.className = "toggle-btn";
-          botao.textContent = "⯆";
-
-          header.appendChild(titulo);
-          header.appendChild(botao);
-
-          const conteudo = document.createElement("div");
-          conteudo.className = "categoria-conteudo";
-
-          itens.forEach((item) => {
-            conteudo.appendChild(criarCard(item));
-          });
-
-          botao.onclick = () => {
-            const fechado = conteudo.classList.toggle("fechado");
-            botao.textContent = fechado ? "⯈" : "⯆";
-          };
-
-          categoriaDiv.appendChild(header);
-          categoriaDiv.appendChild(conteudo);
-          container.appendChild(categoriaDiv);
-        });
-      }
-
-      function removerAcentos(texto) {
-        return texto
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .toLowerCase();
-      }
-
-      function filtrarDebounced() {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
-          const termo = removerAcentos(document.getElementById("search").value);
-
-          const filtrados = listaCompleta.filter((item) => {
-            const codigo = removerAcentos(item.codigo);
-            const nome = removerAcentos(item.nome);
-
-            return codigo.includes(termo) || nome.includes(termo);
-          });
-
-          renderizar(filtrados);
-        }, 200);
-      }
-
-      async function verificarAtualizacao() {
-        try {
-          console.log("Verificando atualização...");
-
-          const [materiais, estoque] = await Promise.all([
-            lerExcel("dados-catalago-pcm-interno/nomes_usuais.xlsx"),
-            lerExcel("dados-catalago-pcm-interno/relatorio.xlsx"),
-          ]);
-
-          const estoqueMap = new Map(
-            estoque.map((item) => [
-              String(item.material).replace(/\s+/g, ""),
-              {
-                unidade: item.unidade,
-                quantidade: item.quantidade,
-                deposito: item.deposito,
-              },
-            ]),
-          );
-
-          const novaLista = materiais.map((mat) => {
-            const cod = String(mat.material).replace(/\s+/g, "");
-            const dadosEstoque = estoqueMap.get(cod);
-
-            return {
-              codigo: cod,
-              nome: mat.nome,
-              categoria: mat.categoria,
-              unidade: dadosEstoque?.unidade ?? "UN",
-              quantidade: dadosEstoque?.quantidade ?? 0,
-              deposito: dadosEstoque?.deposito ?? "PC01",
-            };
-          });
-
-          // comparação simples
-          const atual = JSON.stringify(
-            listaCompleta.map((i) => ({
-              codigo: i.codigo,
-              quantidade: i.quantidade,
-            })),
-          );
-
-          const novo = JSON.stringify(
-            novaLista.map((i) => ({
-              codigo: i.codigo,
-              quantidade: i.quantidade,
-            })),
-          );
-
-          if (atual !== novo && !atualizacaoDisponivel) {
-            console.log("Diferença detectada!");
-
-            atualizacaoDisponivel = true;
-
-            mostrarModalAtualizacao();
-          } else {
-            console.log("Sem alterações");
-          }
-        } catch (erro) {
-          console.error("Erro ao verificar atualização:", erro);
-        }
-      }
-      function mostrarModalAtualizacao() {
-        document.getElementById("updateModal").classList.remove("hidden");
-      }
-
-      function atualizarPagina() {
-        localStorage.removeItem(CACHE_KEY);
-        localStorage.removeItem(CACHE_VERSION_KEY);
-
-        location.reload();
-      }
-      window.onload = async () => {
-        await carregarDados();
-
-        // verifica a cada 5 minutos
-        setInterval(verificarAtualizacao, 5 * 60 * 1000);
-      };
-    </script>
     <div id="toast" class="toast"></div>
     <div id="updateModal" class="update-modal hidden">
       <div class="update-modal-content">
@@ -363,5 +52,6 @@
         <button onclick="atualizarPagina()">Atualizar agora</button>
       </div>
     </div>
+    <script src="js/app.js"></script>
   </body>
 </html>

@@ -2,10 +2,25 @@
   box-sizing: border-box;
 }
 
+.navegacao {
+  background-color: #3065a1;
+  padding: 10px;
+  font-size: 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  margin: 0 10px;
+  transition: all 0.3s;
+  color: white;
+}
+
+.navegacao:hover {
+  background-color: #305b8b;
+}
+
 .update-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
 
   display: flex;
   align-items: center;
@@ -25,7 +40,7 @@
   width: 320px;
   text-align: center;
 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .update-modal-content h2 {
@@ -55,13 +70,21 @@ body {
 header {
   display: flex;
   align-items: center;
-  background: #222f41;
+  background: #24405a;
   color: white;
   position: fixed;
   z-index: 1;
   width: 100vw;
+  justify-content: space-between;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+.botoesHeader {
+  display: flex;
+  align-items: center;
   padding: 15px 25px;
   justify-content: space-between;
+  max-width: 50%;
 }
 
 .categoria {
@@ -81,6 +104,10 @@ header {
 .categoria-header h2 {
   margin: 0;
   color: #1f2937;
+}
+
+.categoria-header button {
+  border: none;
 }
 
 .toggle-btn {
@@ -113,7 +140,7 @@ header {
   border-radius: 15px;
 }
 .search-box input {
-  width: 100%;
+  width: 600px;
   padding: 10px 15px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -280,9 +307,19 @@ header {
   color: rgb(228, 228, 228);
   background-color: #305b8b;
 }
+
 .imgName {
   display: flex;
   align-items: center;
+  background-color: white;
+  color: #305b8b;
+  font-size: 20px;
+  height: 100%;
+  width: 40%;
+  padding: 15px;
+  right: 0;
+  position: absolute;
+  font-weight: bolder;
 }
 
 @media screen and (max-width: 1700px) {

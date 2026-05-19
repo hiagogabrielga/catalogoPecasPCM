@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Catálogo de peças dos PCMs" />
+    <meta name="twitter:description" content="Catálogo de peças para os PCMs" />
+    <meta
+      name="twitter:image"
+      content="https://catalogo-pecas-pcm.vercel.app/logo.png"
+    />
+    <link rel="icon" type="image/png" sizes="32x32" href="logo.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="logo.png" />
+    <link rel="apple-touch-icon" href="logo.png" />
+    <link rel="stylesheet" href="css/global.css" />
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <title>Agilizador de Reservas</title>
+    <link rel="stylesheet" href="css/global.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <!-- Biblioteca Excel -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+  </head>
+
+  <body>
+    <header>
+      <div class="imgName">
+        <img src="./amaggi.png" alt="Logo Amaggi" />
+        <span class="headerName">Agilizador de Lançamento de Reservas</span>
+      </div>
+      <div class="botoesHeader">
+        <a href="/" class="navegacao">↩️ Voltar</a>
+        <a
+          class="ancoraEpi"
+          href="https://amaggicombr-my.sharepoint.com/:x:/r/personal/thiago_ooliveira_amaggi_com_br/Documents/Cat%C3%A1logo%20de%20EPI%20Almoxarifado.XLSX?d=w9a4104c095914d4c8f1ca3a2494e61eb&csf=1&web=1&e=D0fsDA"
+          target="_blank"
+          >Catálogo EPI</a
+        >
+      </div>
+    </header>
+    <main>
+      <div class="containers">
+        <div class="grid">
+          <!-- Entrada -->
+          <section class="card">
+            <h2>Conteúdo</h2>
+
+            <textarea
+              id="entrada"
+              placeholder="Cole aqui o conteúdo..."
+            ></textarea>
+
+            <button id="btnProcessar">Processar</button>
+          </section>
+
+          <!-- Resultado -->
+          <section class="card">
+            <h2>Resultado</h2>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Descrição</th>
+                  <th>Quantidade</th>
+                  <th>UM</th>
+                  <th>CC</th>
+                  <th>Local</th>
+                </tr>
+              </thead>
+
+              <tbody id="resultadoTabela"></tbody>
+            </table>
+          </section>
+        </div>
+      </div>
+      <div id="modalPatim" class="modal hidden">
+        <div class="modal-content">
+          <h3>Escolha o tipo de equipamento</h3>
+
+          <p id="modalTexto"></p>
+
+          <div class="botoes">
+            <button id="btnCavalo">Cavalo</button>
+            <button id="btnCarreta">Carreta</button>
+          </div>
+        </div>
+      </div>
+      <div id="modalOpcao2" class="modal hidden">
+        <div class="modal-content">
+          <h3>Escolha o modelo do equipamento</h3>
+
+          <p id="modalTexto2"></p>
+
+          <div class="botoes">
+            <button id="btnOpcaoA">Scania Dianteira</button>
+            <button id="btnOpcaoB">Scania Tração</button>
+            <button id="btnOpcaoC">Carreta Librelato</button>
+            <button id="btnOpcaoD">Carreta Randon</button>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="js/script.js"></script>
+  </body>
+</html>

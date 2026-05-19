@@ -184,6 +184,7 @@ function criarLinhaTabela(codigo, quantidade, local, encontrado) {
         <td> </td>
         <td>L</td>
         <td>${local}</td>
+        <td><input type="checkbox" name="" id=""></td>
     `;
 
   tabelaResultado.appendChild(tr);

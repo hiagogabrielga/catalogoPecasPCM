@@ -74,6 +74,7 @@ header {
   color: white;
   position: fixed;
   z-index: 1;
+  height: 98px;
   width: 100vw;
   justify-content: space-between;
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
@@ -313,9 +314,9 @@ header {
   align-items: center;
   background-color: white;
   color: #305b8b;
-  font-size: 20px;
+  font-size: 16px;
   height: 100%;
-  width: 40%;
+  width: 45%;
   padding: 15px;
   right: 0;
   position: absolute;

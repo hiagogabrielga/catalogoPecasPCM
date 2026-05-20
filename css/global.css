@@ -137,6 +137,7 @@ header {
   padding: 15px 20px;
   background: #2e3d53;
   min-width: 50%;
+  margin-left: calc(670px - 50%);
   box-sizing: border-box;
   border-radius: 15px;
 }
@@ -314,10 +315,11 @@ header {
   align-items: center;
   background-color: white;
   color: #305b8b;
+  gap: 20px;
   font-size: 16px;
   height: 100%;
-  width: 45%;
-  padding: 15px;
+  width: auto;
+  padding: 20px;
   right: 0;
   position: absolute;
   font-weight: bolder;

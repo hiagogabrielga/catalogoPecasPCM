@@ -85,7 +85,7 @@ header {
   align-items: center;
   padding: 15px 25px;
   justify-content: space-between;
-  max-width: 50%;
+  width: 60%;
 }
 
 .categoria {
@@ -136,13 +136,13 @@ header {
 .search-box {
   padding: 15px 20px;
   background: #2e3d53;
-  min-width: 50%;
+  width: 70%;
   margin-left: calc(670px - 50%);
   box-sizing: border-box;
   border-radius: 15px;
 }
 .search-box input {
-  width: 600px;
+  width: 100%;
   padding: 10px 15px;
   border-radius: 8px;
   border: 1px solid #ccc;

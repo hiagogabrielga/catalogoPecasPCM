@@ -205,7 +205,7 @@ async function processarDados() {
 
     const quantidade = extrairQuantidade(linha);
 
-    if (texto.includes("patim") && texto.includes("rebitado")) {
+    if ((texto.includes("patim") && texto.includes("rebitado")) || texto.includes("patinho")) {
       const tipo = await escolherPatim(linha);
       const opcao = await escolherOpcaoNivel2(tipo, linha);
       let quantidade_jg_lona = Math.ceil(Number(quantidade) / 4);

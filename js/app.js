@@ -8,9 +8,9 @@ let debounceTimer;
 let atualizacaoDisponivel = false;
 
 const IMAGEM_PADRAO = "placeholder.png";
-const CACHE_KEY = "catalogoPecasPCM";
-const CACHE_VERSION_KEY = "catalogoPecasPcmVersao";
-const VERSAO_ATUAL = "2.0.1";
+const CACHE_KEY = "catalogoPecasPCM1";
+const CACHE_VERSION_KEY = "catalogoPecasPcmVersao1";
+const VERSAO_ATUAL = "2.0.2";
 
 // ===============================
 // UTIL

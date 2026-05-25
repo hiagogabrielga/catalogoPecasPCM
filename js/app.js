@@ -10,7 +10,7 @@ let atualizacaoDisponivel = false;
 const IMAGEM_PADRAO = "placeholder.png";
 const CACHE_KEY = "catalogoPecasPCM";
 const CACHE_VERSION_KEY = "catalogoPecasPcmVersao";
-const VERSAO_ATUAL = "2.0.6";
+const VERSAO_ATUAL = "2.0.7";
 
 // ===============================
 // UTIL
@@ -326,6 +326,6 @@ async function carregarDados() {
 // ===============================
 window.onload = async () => {
   await carregarDados();
-
+  console.log('Verificado')
   setInterval(verificarAtualizacao, 10 * 1000);
 };

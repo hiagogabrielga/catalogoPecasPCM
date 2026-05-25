@@ -327,5 +327,5 @@ async function carregarDados() {
 window.onload = async () => {
   await carregarDados();
 
-  setInterval(verificarAtualizacao, 5 * 60 * 1000);
+  setInterval(verificarAtualizacao, 10 * 1000);
 };

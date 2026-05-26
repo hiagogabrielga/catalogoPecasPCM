@@ -138,7 +138,7 @@ function extrairCodigo(texto) {
 
 function extrairQuantidade(texto) {
   texto = texto.replace(/\t/g, " ").replace(/\s+/g, " ").trim();
-
+  texto = texto.replace("(", "").replace(")", "")
   let matchInicio = texto.match(/^(\d+)\s*\.\s*/);
 
   if (matchInicio) {

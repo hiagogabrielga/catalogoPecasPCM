@@ -141,6 +141,27 @@ header {
   box-sizing: border-box;
   border-radius: 15px;
 }
+
+.alerta-erro {
+  width: 750px;
+  height: 100px;
+  margin: 20px auto;
+  background-color: #ffe5e5;
+  border: 2px solid #ff4d4d;
+  border-left: 6px solid #cc0000;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  font-family: Arial, sans-serif;
+  color: #990000;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.alerta-erro span {
+  font-weight: bold;
+  font-size: 16px;
+}
 .search-box input {
   width: 100%;
   padding: 10px 15px;

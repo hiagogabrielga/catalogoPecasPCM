@@ -165,6 +165,13 @@ function extrairQuantidade(texto) {
     return parseInt(matchUn[1]);
   }
 
+  let matchUnd = parteDepoisTraco.match(/(\d+)\s*und$/i);
+
+  if (matchUnd) {
+    return parseInt(matchUnd[1]);
+  }
+
+
   let matchFinal = parteDepoisTraco.match(/(\d+)$/);
 
   if (matchFinal) {

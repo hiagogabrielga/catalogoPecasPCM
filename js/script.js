@@ -240,6 +240,11 @@ async function processarDados() {
       continue;
     }
 
+    if (texto.includes("1010050632") || texto.includes("357623")){
+      criarLinhaTabela("1010050632", Number(quantidade) * 20, "LB01", true)
+      continue
+    }
+
     const codigo = extrairCodigo(linha);
 
     let local = bancoDados[codigo];

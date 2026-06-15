@@ -10,7 +10,7 @@ let atualizacaoDisponivel = false;
 const IMAGEM_PADRAO = "placeholder.png";
 const CACHE_KEY = "catalogoPecasPCM";
 const CACHE_VERSION_KEY = "catalogoPecasPcmVersao";
-const VERSAO_ATUAL = "2.2.15";
+const VERSAO_ATUAL = "2.2.16";
 
 // ===============================
 // UTIL

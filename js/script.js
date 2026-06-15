@@ -138,48 +138,43 @@ function extrairCodigo(texto) {
 
 function extrairQuantidade(texto) {
   texto = texto.replace(/\t/g, " ").replace(/\s+/g, " ").trim();
-  texto = texto.replace("(", "").replace(")", "")
-  let matchInicio = texto.match(/^(\d+)\s*\.\s*/);
 
+  let matchInicio = texto.match(/^(\d+)\s*\.\s*/);
   if (matchInicio) {
     return parseInt(matchInicio[1]);
   }
 
   let parteDepoisTraco = "";
-
   if (texto.includes(" - ")) {
-    parteDepoisTraco = texto.split(" - ")[1].trim();
+    parteDepoisTraco = texto.split(" - ").pop().trim();
   } else {
     parteDepoisTraco = texto;
   }
 
-  let matchDepoisTraco = parteDepoisTraco.match(/^(\d+)\s+/);
+  // 🔹 NOVO: Captura ( 24UND ), (01UND), 24UND etc
+  let matchUndParenteses = parteDepoisTraco.match(/\(?\s*(\d+)\s*und\s*\)?$/i);
+  if (matchUndParenteses) {
+    return parseInt(matchUndParenteses[1]);
+  }
 
+  let matchDepoisTraco = parteDepoisTraco.match(/^(\d+)\s+/);
   if (matchDepoisTraco) {
     return parseInt(matchDepoisTraco[1]);
   }
 
   let matchUn = parteDepoisTraco.match(/(\d+)\s*un$/i);
-
   if (matchUn) {
     return parseInt(matchUn[1]);
   }
 
-  let matchUnd = parteDepoisTraco.match(/(\d+)\s*und$/i);
-
-  if (matchUnd) {
-    return parseInt(matchUnd[1]);
-  }
-
-
   let matchFinal = parteDepoisTraco.match(/(\d+)$/);
-
   if (matchFinal) {
     return parseInt(matchFinal[1]);
   }
 
   return 0;
 }
+
 
 function criarLinhaTabela(codigo, quantidade, local, encontrado) {
   const tr = document.createElement("tr");

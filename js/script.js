@@ -219,7 +219,7 @@ async function processarDados() {
         if (opcao === "scania-tracao") {
           criarLinhaTabela("1010020879", quantidade_jg_lona, "PC01", true);
         }
-        criarLinhaTabela("1010029427", quantidade_jg_lona * 130, "PC01", true);
+        criarLinhaTabela("1010081353", quantidade_jg_lona * 130, "PC01", true);
       } else {
         if (opcao === "librelato") {
           criarLinhaTabela("1040077380", quantidade_jg_lona, "PC01", true);
@@ -228,9 +228,9 @@ async function processarDados() {
         if (opcao === "randon") {
           criarLinhaTabela("409250", quantidade_jg_lona, "PC01", true);
         }
-        criarLinhaTabela("1010029427", quantidade_jg_lona * 130, "PC01", true);
+        criarLinhaTabela("1010081353", quantidade_jg_lona * 130, "PC01", true);
         criarLinhaTabela("1010021543", quantidade, "PC01", true);
-        criarLinhaTabela("1010084315", quantidade, "PC01", true);
+        criarLinhaTabela("1040077368", quantidade, "PC01", true);
       }
       continue;
     }

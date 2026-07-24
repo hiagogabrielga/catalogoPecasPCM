@@ -10,7 +10,7 @@ let atualizacaoDisponivel = false;
 const IMAGEM_PADRAO = "placeholder.png";
 const CACHE_KEY = "catalogoPecasPCM";
 const CACHE_VERSION_KEY = "catalogoPecasPcmVersao";
-const VERSAO_ATUAL = "2.2.21";
+const VERSAO_ATUAL = "2.2.38";
 
 // ===============================
 // UTIL
@@ -90,8 +90,32 @@ function mostrarToast(texto) {
 // COPIAR CÓDIGO
 // ===============================
 function copiarCodigo(codigo) {
-  navigator.clipboard.writeText(codigo);
-  mostrarToast(`Código ${codigo} copiado`);
+  const textarea = document.createElement("textarea");
+  textarea.value = codigo;
+
+  // evita problemas em mobile
+  textarea.style.position = "fixed";
+  textarea.style.left = "-9999px";
+
+  document.body.appendChild(textarea);
+  textarea.focus();
+  textarea.select();
+
+  let sucesso = false;
+
+  try {
+    sucesso = document.execCommand("copy");
+  } catch (err) {
+    console.error(err);
+  }
+
+  document.body.removeChild(textarea);
+
+  if (sucesso) {
+    mostrarToast(`Código ${codigo} copiado`);
+  } else {
+    mostrarToast("Erro ao copiar");
+  }
 }
 
 // ===============================

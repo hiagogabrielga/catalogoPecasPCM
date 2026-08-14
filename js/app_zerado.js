@@ -1,6 +1,6 @@
 "use strict";
 
-// =============================== python -m http.server 8001 --bind 0.0.0.0     
+// =============================== python -m http.server 8001 --bind 0.0.0.0
 // ESTADO GLOBAL
 // ===============================
 let listaCompleta = [];
@@ -36,10 +36,7 @@ async function verificarAtualizacao() {
     ]);
 
     const estoqueMap = new Map(
-      estoque.map((item) => [
-        String(item.material).replace(/\s+/g, ""),
-        item,
-      ])
+      estoque.map((item) => [String(item.material).replace(/\s+/g, ""), item]),
     );
 
     const novaLista = materiais.map((mat) => {
@@ -56,7 +53,7 @@ async function verificarAtualizacao() {
       listaCompleta.map((i) => ({
         codigo: i.codigo,
         quantidade: i.quantidade,
-      }))
+      })),
     );
 
     const novo = JSON.stringify(novaLista);
@@ -70,7 +67,6 @@ async function verificarAtualizacao() {
     } else {
       console.log("Sem alterações");
     }
-
   } catch (erro) {
     console.error("Erro ao verificar atualização:", erro);
   }
@@ -192,14 +188,23 @@ async function encontrarImagem(codigo) {
 // CARD
 // ===============================
 function criarCard(item) {
-  const card = document.createElement("div");
+  console.log(
+    "Criando card para:",
+    item.codigo,
+    item.nome,
+    "Quantidade",
+    item.quantidade,
+    typeof item.quantidade,
+    item.quantidade == 0,
+  );
+  if (item.quantidade == 0) {
+    const card = document.createElement("div");
 
-  const estoqueOk =
-    Number(String(item.quantidade).replace(",", ".")) > 0;
+    const estoqueOk = Number(String(item.quantidade).replace(",", ".")) > 0;
 
-  card.className = `card ${estoqueOk ? "estoque-ok" : "estoque-zero"}`;
+    card.className = `card ${estoqueOk ? "estoque-ok" : "estoque-zero"}`;
 
-  card.innerHTML = `
+    card.innerHTML = `
     <div class="status-bar"></div>
 
     <img src="${item.imagem}" alt="${item.nome}">
@@ -216,8 +221,12 @@ function criarCard(item) {
       <span class="unidade">${item.unidade}</span>
     </div>
   `;
-
-  return card;
+    return card;
+  } else {
+    const card = document.createElement("div");
+    card.style.display = "none";
+    return card;
+  }
 }
 
 // ===============================
@@ -286,9 +295,7 @@ function filtrarDebounced() {
   clearTimeout(debounceTimer);
 
   debounceTimer = setTimeout(() => {
-    const termo = removerAcentos(
-      document.getElementById("search").value
-    );
+    const termo = removerAcentos(document.getElementById("search").value);
 
     const filtrados = listaCompleta.filter((item) => {
       return (
@@ -321,10 +328,7 @@ async function carregarDados() {
     ]);
 
     const estoqueMap = new Map(
-      estoque.map((item) => [
-        String(item.material).replace(/\s+/g, ""),
-        item,
-      ])
+      estoque.map((item) => [String(item.material).replace(/\s+/g, ""), item]),
     );
 
     const candidatos = await Promise.all(
@@ -341,7 +345,7 @@ async function carregarDados() {
           quantidade: est?.quantidade ?? 0,
           deposito: est?.deposito ?? "PC01",
         };
-      })
+      }),
     );
 
     listaCompleta = candidatos.filter(Boolean);
@@ -349,7 +353,6 @@ async function carregarDados() {
 
     localStorage.setItem(CACHE_KEY, JSON.stringify(listaCompleta));
     localStorage.setItem(CACHE_VERSION_KEY, VERSAO_ATUAL);
-
   } catch (err) {
     console.error("Erro:", err);
   }

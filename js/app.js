@@ -14,7 +14,7 @@ const CACHE_VERSION_KEY = "catalogoPecasPcmVersao";
 const CACHE_KEY_ZERADA = "catalogoPecasPCMZerada";
 const CACHE_VERSION_KEY_ZERADA = "catalogoPecasPcmVersaoZerada";
 
-const VERSAO_ATUAL = "2.3.52";
+const VERSAO_ATUAL = "2.3.53";
 
 
 // ===============================

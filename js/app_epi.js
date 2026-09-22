@@ -14,7 +14,7 @@ const CACHE_VERSION_KEY = "catalogoPecasPcmEpi";
 const CACHE_KEY_EPI = "catalogoPecasPCMEpi";
 const CACHE_VERSION_KEY_EPI = "catalogoPecasPcmEpi";
 
-const VERSAO_ATUAL = "2.3.3";
+const VERSAO_ATUAL = "2.3.5";
 
 
 // ===============================

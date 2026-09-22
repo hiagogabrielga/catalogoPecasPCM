@@ -25,16 +25,9 @@
       </div>
       <div class="botoesHeader">
         <div style="display: flex; padding: 20px">
+          <a href="/" class="navegacao">↩️</a>
           <a href="/criacao_externa.html" class="navegacao">📝</a>
-          <a
-            class="ancoraEpi"
-            href="https://amaggicombr-my.sharepoint.com/:x:/r/personal/thiago_ooliveira_amaggi_com_br/Documents/Cat%C3%A1logo%20de%20EPI%20Almoxarifado.XLSX?d=w9a4104c095914d4c8f1ca3a2494e61eb&csf=1&web=1&e=D0fsDA"
-            target="_blank"
-            >Catálogo EPI</a
-          >
-          <a class="navegacao" href="/epi.html">EPI</a>
           <a href="/itens-zerados.html" class="navegacao">Qtd0</a>
-          
         </div>
         <div class="search-box">
           <input
@@ -43,9 +36,11 @@
             placeholder="🔍 Buscar por código ou nome..."
             oninput="filtrarDebounced()"
           />
+          
         </div>
 
-        <script></script>
+        <script>
+        </script>
       </div>
     </header>
     <div class="container" id="cards"></div>
@@ -56,9 +51,9 @@
         <h2>🔄 Novo estoque disponível</h2>
         <p>Foi detectada alteração na base de dados, atualize o estoque.</p>
 
-        <button onclick="atualizarPagina()">Atualizar agora</button>
+        <button onclick="atualizarPaginaEpi()">Atualizar agora</button>
       </div>
     </div>
-    <script src="js/app.js"></script>
+    <script src="js/app_epi.js"></script>
   </body>
 </html>

@@ -33,6 +33,12 @@
             target="_blank"
             >Catálogo EPI</a
           >
+          <a
+            class="navegacao"
+            href="/epi.html"
+            >EPI</a
+          >
+
         </div>
         <div class="search-box">
           <input
@@ -42,28 +48,8 @@
             oninput="filtrarDebounced()"
           />
 
-          <!-- Botão oculto -->
-          <button
-            id="btnHidden"
-            style="background-color: white; color: white; border: none; cursor: pointer; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); z-index: 10000;"
-            onclick="verificarSenha()"
-          >
-          d
-          </button>
         </div>
 
-        <script>
-          function verificarSenha() {
-            const valor = document.getElementById("search").value;
-
-            // Senha definida
-            const senha = "JogoDaVelhaComIA12";
-
-            if (valor === senha) {
-              window.location.href = "http://172.31.209.183:8001/astyo4u34ojtjgpj4pjotljylfjl.html";
-            }
-          }
-        </script>
       </div>
     </header>
     <div class="container" id="cards"></div>

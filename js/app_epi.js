@@ -8,13 +8,13 @@ let debounceTimer;
 let atualizacaoDisponivel = false;
 
 const IMAGEM_PADRAO = "placeholder.png";
-const CACHE_KEY = "catalogoPecasPCM";
-const CACHE_VERSION_KEY = "catalogoPecasPcmVersao";
+const CACHE_KEY = "catalogoPecasPCMEpi";
+const CACHE_VERSION_KEY = "catalogoPecasPcmEpi";
 
-const CACHE_KEY_ZERADA = "catalogoPecasPCMZerada";
-const CACHE_VERSION_KEY_ZERADA = "catalogoPecasPcmVersaoZerada";
+const CACHE_KEY_EPI = "catalogoPecasPCMEpi";
+const CACHE_VERSION_KEY_EPI = "catalogoPecasPcmEpi";
 
-const VERSAO_ATUAL = "2.3.52";
+const VERSAO_ATUAL = "2.3.3";
 
 
 // ===============================
@@ -32,7 +32,7 @@ async function verificarAtualizacao() {
     console.log("Verificando atualização...");
 
     const [materiais, estoque] = await Promise.all([
-      lerExcel("dados-catalago-pcm-interno/nomes_usuais.xlsx"),
+      lerExcel("dados-catalago-pcm-interno/nomes_usuais_epi.xlsx"),
       lerExcel("dados-catalago-pcm-interno/relatorio.xlsx"),
     ]);
 
@@ -139,6 +139,12 @@ function atualizarPagina() {
 function atualizarPaginaZerada() {
   localStorage.removeItem(CACHE_KEY_ZERADA);
   localStorage.removeItem(CACHE_VERSION_KEY_ZERADA);
+  location.reload();
+}
+
+function atualizarPaginaEpi() {
+  localStorage.removeItem(CACHE_KEY_EPI);
+  localStorage.removeItem(CACHE_VERSION_KEY_EPI);
   location.reload();
 }
 
@@ -317,7 +323,7 @@ async function carregarDados() {
     }
 
     const [materiais, estoque] = await Promise.all([
-      lerExcel("dados-catalago-pcm-interno/nomes_usuais.xlsx"),
+      lerExcel("dados-catalago-pcm-interno/nomes_usuais_epi.xlsx"),
       lerExcel("dados-catalago-pcm-interno/relatorio.xlsx"),
     ]);
 
